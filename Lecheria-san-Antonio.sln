@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37111.16 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apI", "apI", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CORE", "CORE", "{BD4E8DA7-6D19-40F9-BC89-6871D4E9AE2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "INFRASTRUCTURE", "INFRASTRUCTURE", "{541450F5-1FDB-4113-A036-3D752DA341BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TEST", "TEST", "{289FF0BA-4631-4E36-A766-D5B902AF2FBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecheria.Domain", "Lecheria.Domain\Lecheria.Domain.csproj", "{793520D6-BB84-4170-A6A2-78A1795EAE4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecheria.Application", "Lecheria.Application\Lecheria.Application.csproj", "{51AAF409-FB56-4FF6-B70F-B04DD677AFC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecheria.Infrastructure", "Lecheria.Infrastructure\Lecheria.Infrastructure.csproj", "{3098527D-402B-433C-9407-17E427DC3C79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecheria.Web", "Lecheria.Web\Lecheria.Web.csproj", "{17FE8E65-1BCE-4192-A389-30A308AFAE9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lecheria.Test", "Lecheria.Test\Lecheria.Test.csproj", "{9CBE3A6D-FC9F-49D0-8FB7-985C021EB80F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{793520D6-BB84-4170-A6A2-78A1795EAE4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793520D6-BB84-4170-A6A2-78A1795EAE4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793520D6-BB84-4170-A6A2-78A1795EAE4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793520D6-BB84-4170-A6A2-78A1795EAE4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51AAF409-FB56-4FF6-B70F-B04DD677AFC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51AAF409-FB56-4FF6-B70F-B04DD677AFC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51AAF409-FB56-4FF6-B70F-B04DD677AFC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51AAF409-FB56-4FF6-B70F-B04DD677AFC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3098527D-402B-433C-9407-17E427DC3C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3098527D-402B-433C-9407-17E427DC3C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3098527D-402B-433C-9407-17E427DC3C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3098527D-402B-433C-9407-17E427DC3C79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17FE8E65-1BCE-4192-A389-30A308AFAE9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17FE8E65-1BCE-4192-A389-30A308AFAE9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17FE8E65-1BCE-4192-A389-30A308AFAE9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17FE8E65-1BCE-4192-A389-30A308AFAE9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CBE3A6D-FC9F-49D0-8FB7-985C021EB80F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CBE3A6D-FC9F-49D0-8FB7-985C021EB80F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CBE3A6D-FC9F-49D0-8FB7-985C021EB80F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CBE3A6D-FC9F-49D0-8FB7-985C021EB80F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{793520D6-BB84-4170-A6A2-78A1795EAE4D} = {BD4E8DA7-6D19-40F9-BC89-6871D4E9AE2B}
+		{51AAF409-FB56-4FF6-B70F-B04DD677AFC2} = {BD4E8DA7-6D19-40F9-BC89-6871D4E9AE2B}
+		{3098527D-402B-433C-9407-17E427DC3C79} = {541450F5-1FDB-4113-A036-3D752DA341BB}
+		{17FE8E65-1BCE-4192-A389-30A308AFAE9F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {327132B0-0D4D-4FF5-BFB8-CF3155BF84E7}
+	EndGlobalSection
+EndGlobal
