@@ -3,22 +3,20 @@ using Lecheria.Domain.Enums;
 
 namespace Lecheria.Domain.Entities;
 
-
-/// Ficha individual de la res (HU-03, HU-04, HU-05) y raiz del agregado Res.
-/// el codigo de identificacion debe ser unico.
-
+/// <summary>
+/// Ficha individual de la res para su registro y consulta (HU-03, HU-04).
+/// RN-01: el codigo de identificacion debe ser unico.
+/// </summary>
 public class Res : EntityBase
 {
+    public const int LongitudMaximaCodigo = 120;
+
     public string Codigo { get; set; } = string.Empty;
     public string Raza { get; set; } = string.Empty;
     public Sexo Sexo { get; set; }
     public DateOnly FechaNacimiento { get; set; }
     public decimal Peso { get; set; }
     public EstadoRes Estado { get; set; } = EstadoRes.Activa;
-
-    public ICollection<Alimentacion> Alimentaciones { get; set; } = new List<Alimentacion>();
-    public ICollection<EventoSanitario> EventosSanitarios { get; set; } = new List<EventoSanitario>();
-    public ICollection<Ordeno> Ordenos { get; set; } = new List<Ordeno>();
 
     /// <summary>Edad en anos calculada desde la fecha de nacimiento.</summary>
     [NotMapped]

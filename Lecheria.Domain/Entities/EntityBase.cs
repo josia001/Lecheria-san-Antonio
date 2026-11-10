@@ -1,3 +1,4 @@
+﻿
 namespace Lecheria.Domain.Entities;
 
 public abstract class EntityBase
