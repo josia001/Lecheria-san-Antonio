@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "Lechería San Antonio",
+    "Projects": [
+      {
+        "Path": "Lecheria.Web\\Lecheria.Web.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

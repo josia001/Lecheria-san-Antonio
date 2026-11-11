@@ -22,18 +22,18 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "LESAN API - Sistema de Gestión Ganadera",
+        Title = "LESAN API - Sistema de Gestiï¿½n Ganadera",
         Version = "v1",
         Description =
-            "API REST para la gestión ganadera de " +
-            "la Lechería San Antonio (LESAN)."
+            "API REST para la gestiï¿½n ganadera de " +
+            "la Lecherï¿½a San Antonio (LESAN)."
     });
 
-    // AUTENTICACIÓN JWT EN SWAGGER
+    // AUTENTICACIï¿½N JWT EN SWAGGER
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description =
-            "Introduce el token JWT obtenido al iniciar sesión.",
+            "Introduce el token JWT obtenido al iniciar sesiï¿½n.",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
@@ -79,7 +79,7 @@ builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 // ==========================================
-// CONFIGURACIÓN JWT
+// CONFIGURACIï¿½N JWT
 // ==========================================
 
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -91,7 +91,7 @@ if (string.IsNullOrWhiteSpace(jwtKey) ||
     string.IsNullOrWhiteSpace(jwtAudience))
 {
     throw new InvalidOperationException(
-        "La configuración JWT está incompleta.");
+        "La configuraciï¿½n JWT estï¿½ incompleta.");
 }
 
 byte[] jwtKeyBytes;
@@ -113,7 +113,7 @@ if (jwtKeyBytes.Length < 32)
 }
 
 // ==========================================
-// AUTENTICACIÓN JWT
+// AUTENTICACIï¿½N JWT
 // ==========================================
 
 builder.Services.AddAuthentication(options =>
@@ -167,12 +167,12 @@ builder.Services.AddAuthentication(options =>
 
             if (!int.TryParse(idTexto, out int usuarioId))
             {
-                context.Fail("Token de usuario inválido.");
+                context.Fail("Token de usuario invï¿½lido.");
                 return;
             }
 
             // ==================================
-            // 2. OBTENER CONEXIÓN A BASE DE DATOS
+            // 2. OBTENER CONEXIï¿½N A BASE DE DATOS
             // ==================================
 
             var db = context.HttpContext
@@ -224,7 +224,7 @@ builder.Services.AddAuthentication(options =>
             if (string.IsNullOrWhiteSpace(jti))
             {
                 context.Fail(
-                    "El token no contiene un identificador válido.");
+                    "El token no contiene un identificador vï¿½lido.");
 
                 return;
             }
@@ -240,7 +240,7 @@ builder.Services.AddAuthentication(options =>
             if (tokenRevocado)
             {
                 context.Fail(
-                    "Este token fue revocado. Inicia sesión nuevamente.");
+                    "Este token fue revocado. Inicia sesiï¿½n nuevamente.");
 
                 return;
             }
@@ -249,7 +249,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // ==========================================
-// AUTORIZACIÓN POR ROLES
+// AUTORIZACIï¿½N POR ROLES
 // ==========================================
 
 builder.Services.AddAuthorization(options =>
@@ -262,7 +262,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 // ==========================================
-// CONSTRUIR APLICACIÓN
+// CONSTRUIR APLICACIï¿½N
 // ==========================================
 
 var app = builder.Build();
