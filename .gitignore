@@ -361,3 +361,17 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Datos locales de la aplicacion
+**/App_Data/
+.dotnet/
+
+# Archivos locales y entregas de trabajo
+.codex/
+.nuget/
+tmp/
+output/
+Lecheria-San-Antonio-Adaptado/
+Lecheria-san-Antonio-Reorganizado/
+Sabor-A-Quisqueya-recuperacion/
+*.zip
+*.rar

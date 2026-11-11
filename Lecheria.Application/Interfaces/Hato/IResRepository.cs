@@ -6,5 +6,4 @@ namespace Lecheria.Application.Interfaces;
 public interface IResRepository : IRepository<Res>
 {
     Task<Res?> GetByCodigoAsync(string codigo);
-    Task<Res?> GetFichaCompletaAsync(int id);
 }
