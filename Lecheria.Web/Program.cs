@@ -1,5 +1,7 @@
 using Lecheria.Application.Interfaces;
+using Lecheria.Application.Service;
 using Lecheria.Domain.Entities;
+using Lecheria.Infrastructure;
 using Lecheria.Infrastructure.Persistence;
 using Lecheria.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -22,18 +24,22 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "LESAN API - Sistema de Gesti�n Ganadera",
+        Title = "LESAN API - Sistema de Gestión Ganadera",
         Version = "v1",
         Description =
-            "API REST para la gesti�n ganadera de " +
-            "la Lecher�a San Antonio (LESAN)."
+            "API REST para la gestión ganadera de " +
+            "la Lechería San Antonio (LESAN)."
     });
 
-    // AUTENTICACI�N JWT EN SWAGGER
+    // ======================================
+    // AUTENTICACIÓN JWT EN SWAGGER
+    // ======================================
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description =
-            "Introduce el token JWT obtenido al iniciar sesi�n.",
+            "Introduce el token JWT obtenido al iniciar sesión.",
+
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
@@ -58,28 +64,82 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 // ==========================================
-// BASE DE DATOS
+// BASE DE DATOS LESAN
 // ==========================================
 
+// Obtener cadena de conexión principal
+
+var connectionString = builder.Configuration
+    .GetConnectionString("DefaultConnection");
+
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "No se encontró la cadena de conexión DefaultConnection.");
+}
+
+// ==========================================
+// CONTEXTO DE USUARIOS Y AUTENTICACIÓN
+// ==========================================
+
+// Gestiona usuarios, roles y tokens revocados
+
 builder.Services.AddDbContext<LecheriaDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString(
-            "DefaultConnection")));
+    options.UseSqlServer(connectionString));
+
+// ==========================================
+// CONTEXTO DE GESTIÓN DE RESES
+// ==========================================
+
+// Gestiona el registro y consulta de reses
+
+builder.Services.AddDbContext<LecheriaDb>(options =>
+    options.UseSqlServer(connectionString));
 
 // ==========================================
 // SERVICIOS
 // ==========================================
 
+// ======================================
+// SERVICIO PARA CONTRASEÑAS
+// ======================================
+
 builder.Services.AddScoped<
     IPasswordHasher<Usuario>,
     PasswordHasher<Usuario>>();
 
-builder.Services.AddScoped<IUsuarioService, UsuarioService>();
+// ======================================
+// SERVICIOS DE USUARIOS
+// ======================================
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<
+    IUsuarioService,
+    UsuarioService>();
+
+// ======================================
+// SERVICIO DE AUTENTICACIÓN
+// ======================================
+
+builder.Services.AddScoped<
+    IAuthService,
+    AuthService>();
 
 // ==========================================
-// CONFIGURACI�N JWT
+// SERVICIOS Y REPOSITORIOS DE RESES
+// ==========================================
+
+// Repositorio para gestionar las reses
+
+builder.Services.AddScoped<
+    IResRepository,
+    ResRepositorio>();
+
+// Servicio para registrar y consultar reses
+
+builder.Services.AddScoped<ResService>();
+
+// ==========================================
+// CONFIGURACIÓN JWT
 // ==========================================
 
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -91,7 +151,7 @@ if (string.IsNullOrWhiteSpace(jwtKey) ||
     string.IsNullOrWhiteSpace(jwtAudience))
 {
     throw new InvalidOperationException(
-        "La configuraci�n JWT est� incompleta.");
+        "La configuración JWT está incompleta.");
 }
 
 byte[] jwtKeyBytes;
@@ -113,7 +173,7 @@ if (jwtKeyBytes.Length < 32)
 }
 
 // ==========================================
-// AUTENTICACI�N JWT
+// AUTENTICACIÓN JWT
 // ==========================================
 
 builder.Services.AddAuthentication(options =>
@@ -147,6 +207,7 @@ builder.Services.AddAuthentication(options =>
             ClockSkew = TimeSpan.Zero,
 
             RoleClaimType = "role",
+
             NameClaimType = "name"
         };
 
@@ -167,12 +228,12 @@ builder.Services.AddAuthentication(options =>
 
             if (!int.TryParse(idTexto, out int usuarioId))
             {
-                context.Fail("Token de usuario inv�lido.");
+                context.Fail("Token de usuario inválido.");
                 return;
             }
 
             // ==================================
-            // 2. OBTENER CONEXI�N A BASE DE DATOS
+            // 2. OBTENER CONEXIÓN A BASE DE DATOS
             // ==================================
 
             var db = context.HttpContext
@@ -224,7 +285,7 @@ builder.Services.AddAuthentication(options =>
             if (string.IsNullOrWhiteSpace(jti))
             {
                 context.Fail(
-                    "El token no contiene un identificador v�lido.");
+                    "El token no contiene un identificador válido.");
 
                 return;
             }
@@ -240,7 +301,7 @@ builder.Services.AddAuthentication(options =>
             if (tokenRevocado)
             {
                 context.Fail(
-                    "Este token fue revocado. Inicia sesi�n nuevamente.");
+                    "Este token fue revocado. Inicia sesión nuevamente.");
 
                 return;
             }
@@ -249,7 +310,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 // ==========================================
-// AUTORIZACI�N POR ROLES
+// AUTORIZACIÓN POR ROLES
 // ==========================================
 
 builder.Services.AddAuthorization(options =>
@@ -262,7 +323,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 // ==========================================
-// CONSTRUIR APLICACI�N
+// CONSTRUIR APLICACIÓN
 // ==========================================
 
 var app = builder.Build();

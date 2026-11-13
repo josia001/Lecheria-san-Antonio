@@ -1,4 +1,5 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Lecheria.Application.Common;
@@ -153,6 +154,58 @@ namespace Lecheria.Infrastructure.Services
             return ResultadoServicio<LoginRespuestaDto>.Ok(
                 respuesta,
                 "Inicio de sesión exitoso.");
+        }
+
+        // ==========================================
+        // CERRAR SESIÓN
+        // ==========================================
+
+        public async Task<ResultadoServicio<bool>> LogoutAsync(
+            string jti,
+            DateTime fechaExpiracion)
+        {
+            // Validar identificador del token
+            if (string.IsNullOrWhiteSpace(jti))
+            {
+                return ResultadoServicio<bool>.Error(
+                    "El identificador del token no es válido.",
+                    400);
+            }
+
+            // Verificar que el token no haya expirado
+            if (fechaExpiracion <= DateTime.UtcNow)
+            {
+                return ResultadoServicio<bool>.Error(
+                    "El token ya ha expirado.",
+                    401);
+            }
+
+            // Comprobar si ya fue revocado
+            bool yaRevocado = await _context.TokensRevocados
+                .AnyAsync(t => t.Jti == jti);
+
+            if (yaRevocado)
+            {
+                return ResultadoServicio<bool>.Error(
+                    "La sesión ya fue cerrada.",
+                    401);
+            }
+
+            // Registrar token revocado
+            var tokenRevocado = new TokenRevocado
+            {
+                Jti = jti,
+                FechaExpiracion = fechaExpiracion,
+                FechaRevocacion = DateTime.UtcNow
+            };
+
+            _context.TokensRevocados.Add(tokenRevocado);
+
+            await _context.SaveChangesAsync();
+
+            return ResultadoServicio<bool>.Ok(
+                true,
+                "Sesión cerrada correctamente.");
         }
 
         // ==========================================
