@@ -22,6 +22,41 @@ namespace Lecheria.Infrastructure.Migrations.Reses
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Lecheria.Domain.Entities.Alimentacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Cantidad")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateTime>("FechaSuministro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ResId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TipoAlimento")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UnidadMedida")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResId");
+
+                    b.ToTable("Alimentaciones", (string)null);
+                });
+
             modelBuilder.Entity("Lecheria.Domain.Entities.Res", b =>
                 {
                     b.Property<int>("Id")
@@ -59,6 +94,17 @@ namespace Lecheria.Infrastructure.Migrations.Reses
                         .IsUnique();
 
                     b.ToTable("Res");
+                });
+
+            modelBuilder.Entity("Lecheria.Domain.Entities.Alimentacion", b =>
+                {
+                    b.HasOne("Lecheria.Domain.Entities.Res", "Res")
+                        .WithMany()
+                        .HasForeignKey("ResId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Res");
                 });
 #pragma warning restore 612, 618
         }

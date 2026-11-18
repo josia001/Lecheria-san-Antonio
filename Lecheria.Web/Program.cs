@@ -1,4 +1,5 @@
 using Lecheria.Application.Interfaces;
+using Lecheria.Application.Interfaces.Alimentacion;
 using Lecheria.Application.Service;
 using Lecheria.Domain.Entities;
 using Lecheria.Infrastructure;
@@ -67,8 +68,6 @@ builder.Services.AddSwaggerGen(options =>
 // BASE DE DATOS LESAN
 // ==========================================
 
-// Obtener cadena de conexión principal
-
 var connectionString = builder.Configuration
     .GetConnectionString("DefaultConnection");
 
@@ -88,10 +87,8 @@ builder.Services.AddDbContext<LecheriaDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 // ==========================================
-// CONTEXTO DE GESTIÓN DE RESES
+// CONTEXTO DE GESTIÓN DE RESES Y ALIMENTACIÓN
 // ==========================================
-
-// Gestiona el registro y consulta de reses
 
 builder.Services.AddDbContext<LecheriaDb>(options =>
     options.UseSqlServer(connectionString));
@@ -137,6 +134,14 @@ builder.Services.AddScoped<
 // Servicio para registrar y consultar reses
 
 builder.Services.AddScoped<ResService>();
+
+// ==========================================
+// SERVICIO DE ALIMENTACIÓN (HU-06)
+// ==========================================
+
+builder.Services.AddScoped<
+    IAlimentacionService,
+    AlimentacionService>();
 
 // ==========================================
 // CONFIGURACIÓN JWT
