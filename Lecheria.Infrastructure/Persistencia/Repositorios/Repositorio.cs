@@ -15,6 +15,24 @@ public class Repositorio<T>(LecheriaDb db) : IRepository<T> where T : EntityBase
     public async Task AddAsync(T entity)
     {
         Datos.Add(entity);
+        await GuardarCambiosAsync();
+    }
+
+    public async Task UpdateAsync(T entity)
+    {
+        Datos.Update(entity);
+        try
+        {
+            await GuardarCambiosAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new NoEncontradoException("El registro no existe.");
+        }
+    }
+
+    private async Task GuardarCambiosAsync()
+    {
         try
         {
             await db.SaveChangesAsync();
