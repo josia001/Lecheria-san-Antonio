@@ -15,3 +15,10 @@ public enum EstadoRes
     Baja = 3,
     EnTratamiento = 4
 }
+
+public enum TipoEventoSanitario
+{
+    Vacuna = 1,
+    Tratamiento = 2,
+    Observacion = 3
+}

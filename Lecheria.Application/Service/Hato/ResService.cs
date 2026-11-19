@@ -43,6 +43,28 @@ public class ResService
         return res;
     }
 
+    public async Task<Res> ActualizarAsync(int id, CrearResRequest solicitud)
+    {
+        var res = await ObtenerPorIdAsync(id);
+        Validar(solicitud.Codigo, solicitud.Raza, solicitud.FechaNacimiento,
+            solicitud.Peso, solicitud.Sexo, solicitud.Estado);
+
+        var codigo = solicitud.Codigo.Trim();
+        var repetida = await _reses.GetByCodigoAsync(codigo);
+        if (repetida is not null && repetida.Id != id)
+            throw new AppException("Ya existe otra res con ese código.");
+
+        res.Codigo = codigo;
+        res.Raza = solicitud.Raza.Trim();
+        res.Sexo = solicitud.Sexo;
+        res.FechaNacimiento = solicitud.FechaNacimiento;
+        res.Peso = solicitud.Peso;
+        res.Estado = solicitud.Estado;
+
+        await _reses.UpdateAsync(res);
+        return res;
+    }
+
     private static void Validar(string codigo, string raza, DateOnly nacimiento, decimal peso, Sexo sexo, EstadoRes estado)
     {
         if (string.IsNullOrWhiteSpace(codigo) || string.IsNullOrWhiteSpace(raza))
