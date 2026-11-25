@@ -45,6 +45,31 @@ public class ResesController(ResService reses) : ControllerBase
         }
     }
 
+    [HttpPut("{id:int}")]
+    [Consumes("application/json")]
+    [ProducesResponseType(typeof(ResResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ResResponse>> Actualizar(
+        int id, [FromBody] CrearResRequest solicitud)
+    {
+        try
+        {
+            var res = await reses.ActualizarAsync(id, solicitud);
+            return Ok(CrearRespuesta(res));
+        }
+        catch (NoEncontradoException error)
+        {
+            return Problem(statusCode: StatusCodes.Status404NotFound,
+                title: "Res no encontrada.", detail: error.Message);
+        }
+        catch (AppException error)
+        {
+            return Problem(statusCode: StatusCodes.Status400BadRequest,
+                title: "No se pudo actualizar la res.", detail: error.Message);
+        }
+    }
+
     private static ResResponse CrearRespuesta(Res res) => new()
     {
         Id = res.Id,

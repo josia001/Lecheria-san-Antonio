@@ -22,7 +22,7 @@ namespace Lecheria.Infrastructure.Migrations.Reses
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Lecheria.Domain.Entities.Alimentacion", b =>
+            modelBuilder.Entity("Lecheria.Domain.Entities.EventoSanitario", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,31 +30,24 @@ namespace Lecheria.Infrastructure.Migrations.Reses
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Cantidad")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaSuministro")
+                    b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("ResId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TipoAlimento")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("UnidadMedida")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ResId");
 
-                    b.ToTable("Alimentaciones", (string)null);
+                    b.ToTable("EventoSanitario", "dbo");
                 });
 
             modelBuilder.Entity("Lecheria.Domain.Entities.Res", b =>
@@ -96,15 +89,13 @@ namespace Lecheria.Infrastructure.Migrations.Reses
                     b.ToTable("Res");
                 });
 
-            modelBuilder.Entity("Lecheria.Domain.Entities.Alimentacion", b =>
+            modelBuilder.Entity("Lecheria.Domain.Entities.EventoSanitario", b =>
                 {
-                    b.HasOne("Lecheria.Domain.Entities.Res", "Res")
+                    b.HasOne("Lecheria.Domain.Entities.Res", null)
                         .WithMany()
                         .HasForeignKey("ResId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Res");
                 });
 #pragma warning restore 612, 618
         }

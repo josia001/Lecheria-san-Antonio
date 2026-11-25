@@ -2,6 +2,7 @@ using Lecheria.Application.Interfaces;
 using Lecheria.Application.Interfaces.Alimentacion;
 using Lecheria.Application.Service;
 using Lecheria.Domain.Entities;
+using Lecheria.Domain.Interfaces;
 using Lecheria.Infrastructure;
 using Lecheria.Infrastructure.Persistence;
 using Lecheria.Infrastructure.Services;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Security.Claims;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 // CONTROLADORES Y SWAGGER
 // ==========================================
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
@@ -90,8 +93,12 @@ builder.Services.AddDbContext<LecheriaDbContext>(options =>
 // CONTEXTO DE GESTIÓN DE RESES Y ALIMENTACIÓN
 // ==========================================
 
+// Gestiona el registro y consulta de reses
+
+var resesConnectionString = builder.Configuration.GetConnectionString("Lecheria");
 builder.Services.AddDbContext<LecheriaDb>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(string.IsNullOrWhiteSpace(resesConnectionString)
+        ? connectionString : resesConnectionString));
 
 // ==========================================
 // SERVICIOS
@@ -134,6 +141,8 @@ builder.Services.AddScoped<
 // Servicio para registrar y consultar reses
 
 builder.Services.AddScoped<ResService>();
+builder.Services.AddScoped<IRepository<EventoSanitario>, Repositorio<EventoSanitario>>();
+builder.Services.AddScoped<EventoSanitarioService>();
 
 // ==========================================
 // SERVICIO DE ALIMENTACIÓN (HU-06)
@@ -332,6 +341,15 @@ builder.Services.AddAuthorization(options =>
 // ==========================================
 
 var app = builder.Build();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<LecheriaDb>();
+    if (!string.IsNullOrWhiteSpace(resesConnectionString))
+        await db.InicializarAsync();
+    else
+        await db.Database.MigrateAsync();
+}
 
 // ==========================================
 // CREAR PRIMER ADMINISTRADOR
