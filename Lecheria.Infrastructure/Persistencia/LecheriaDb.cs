@@ -3,8 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lecheria.Infrastructure;
 
-public class LecheriaDb(DbContextOptions<LecheriaDb> options) : DbContext(options)
+public class LecheriaDb(DbContextOptions<LecheriaDb> options)
+    : DbContext(options)
 {
+    public DbSet<Alimentacion> Alimentaciones => Set<Alimentacion>();
+
     protected override void OnModelCreating(ModelBuilder model)
     {
         model.Entity<Res>().HasIndex(r => r.Codigo).IsUnique();
